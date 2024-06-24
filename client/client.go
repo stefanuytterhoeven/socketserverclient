@@ -5,26 +5,27 @@ import (
 	"encoding/gob"
 	"fmt"
 	"io"
+	"log"
 	"net"
 	"os"
 
 	"github.com/stefanuytterhoeven/socketserverclient/shared"
 )
 
-type GreetingMessage struct {
-	Name string
-	Body string
-}
+var (
+	WarningLogger *log.Logger
+	InfoLogger    *log.Logger
+	ErrorLogger   *log.Logger
+)
 
-type StatusMessage struct {
-	Status string
-	Code   int
-}
+type GreetingMessage shared.GreetingMessage
+
+type StatusMessage shared.StatusMessage
 
 func sendMessage(conn net.Conn, msgType string, msg interface{}) error {
 	writer := bufio.NewWriter(conn)
 	encoder := gob.NewEncoder(writer)
-
+	InfoLogger.Println("Sending "+msgType+" ", msg)
 	if err := encoder.Encode(msgType); err != nil {
 		return fmt.Errorf("error encoding message type: %w", err)
 	}
@@ -37,25 +38,37 @@ func sendMessage(conn net.Conn, msgType string, msg interface{}) error {
 	return nil
 }
 
+func init() {
+	file, err := os.OpenFile("../logs/logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatal(err)
+		fmt.Println("logging failed")
+	}
+	InfoLogger = log.New(file, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+	WarningLogger = log.New(file, "WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
+	ErrorLogger = log.New(file, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
+}
+
 func main() {
-	shared.Sharingtest("message")
+
 	conn, err := net.Dial("tcp", "localhost:8080")
 	if err != nil {
-		fmt.Println("Error connecting to server:", err)
+		ErrorLogger.Println("Error connecting to server:", err)
 		os.Exit(1)
 	}
 	var counter int = 0
 	defer conn.Close()
 
 	// Stuur een greeting message
+
 	if err := sendMessage(conn, "greeting", GreetingMessage{Name: "Alice", Body: "Hello, server!"}); err != nil {
-		fmt.Println("Error sending greeting message:", err)
+		ErrorLogger.Println("Error sending greeting message:", err)
 		return
 	}
 
 	// Stuur een status message
 	if err := sendMessage(conn, "status", StatusMessage{Status: "OK", Code: 200}); err != nil {
-		fmt.Println("Error sending status message:", err)
+		ErrorLogger.Println("Error sending status message:", err)
 		return
 	}
 
@@ -64,13 +77,13 @@ func main() {
 		response, err := reader.ReadString('\n')
 		if err != nil {
 			if err == io.EOF {
-				fmt.Println("Connection closed by server")
+				InfoLogger.Println("Connection closed by server")
 			} else {
-				fmt.Println("Error reading response:", err)
+				WarningLogger.Println("Error reading response:", err)
 			}
 			return
 		}
-		fmt.Printf("Server response: %s", response)
+		InfoLogger.Printf("Server response: %s", response)
 		counter += 1
 		if counter >= 2 {
 			return

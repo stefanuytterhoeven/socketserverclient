@@ -1,0 +1,8 @@
+INFO: 2024/06/24 14:03:03 server.go:132: Server is over tcp on localhost:8080
+INFO: 2024/06/24 14:03:45 server.go:141: Client connected.
+INFO: 2024/06/24 14:03:45 server.go:142: Client 127.0.0.1:60406 connected.
+INFO: 2024/06/24 14:03:45 server.go:79: Greeting Message received: {Name:Alice Body:Hello, server!}
+INFO: 2024/06/24 14:03:45 server.go:90: Status Message received: {Status:OK Code:200}
+INFO: 2024/06/24 14:03:45 client.go:94: Server response: Greeting Message received: {Name:Alice Body:Hello, server!}
+INFO: 2024/06/24 14:03:45 client.go:94: Server response: Status Message received: {Status:OK Code:200}
+INFO: 2024/06/24 14:03:45 server.go:62: Connection closed by client

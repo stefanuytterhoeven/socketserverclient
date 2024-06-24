@@ -1,7 +1,11 @@
 package shared
 
-import "fmt"
+type GreetingMessage struct {
+	Name string
+	Body string
+}
 
-func Sharingtest(msg string) {
-	fmt.Println("sharing test", msg)
+type StatusMessage struct {
+	Status string
+	Code   int
 }

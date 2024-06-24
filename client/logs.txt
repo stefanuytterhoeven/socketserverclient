@@ -1,0 +1,6 @@
+INFO: 2024/06/24 13:56:30 main.go:94: Server response: Greeting Message received: {Name:Alice Body:Hello, server!}
+INFO: 2024/06/24 13:56:30 main.go:94: Server response: Status Message received: {Status:OK Code:200}
+INFO: 2024/06/24 13:57:44 client.go:94: Server response: Greeting Message received: {Name:Alice Body:Hello, server!}
+INFO: 2024/06/24 13:57:44 client.go:94: Server response: Status Message received: {Status:OK Code:200}
+INFO: 2024/06/24 13:59:18 client.go:94: Server response: Greeting Message received: {Name:Alice Body:Hello, server!}
+INFO: 2024/06/24 13:59:18 client.go:94: Server response: Status Message received: {Status:OK Code:200}
