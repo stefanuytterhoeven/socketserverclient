@@ -7,6 +7,8 @@ import (
 	"io"
 	"net"
 	"os"
+
+	"github.com/stefanuytterhoeven/socketserverclient/shared"
 )
 
 type GreetingMessage struct {
@@ -36,6 +38,7 @@ func sendMessage(conn net.Conn, msgType string, msg interface{}) error {
 }
 
 func main() {
+	shared.Sharingtest("message")
 	conn, err := net.Dial("tcp", "localhost:8080")
 	if err != nil {
 		fmt.Println("Error connecting to server:", err)

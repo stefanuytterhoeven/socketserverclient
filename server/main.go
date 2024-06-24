@@ -88,6 +88,8 @@ func handleConnection(conn net.Conn) {
 }
 
 func main() {
+
+	sharingtest("fsdqsfdqqsfdfsdqfsqdfsd")
 	listener, err := net.Listen(connType, connHost+":"+connPort)
 
 	if err != nil {
